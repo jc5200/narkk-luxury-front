@@ -30,10 +30,11 @@ const Home = () => {
         <div className="container-custom grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="md:col-span-1">
             <img
-              src="https://images.unsplash.com/photo-1517142089942-ba376ce32a2e?w=800&auto=format&fit=crop"
-              alt="Hero"
+              src="/lovable-uploads/08e35f11-3797-4fdc-9c12-c779b64ca01f.png"
+              alt="Yappani bar chair"
               className="h-64 w-full md:h-96 object-cover object-center"
             />
+            <p className="text-narkk-slate font-medium mt-2">Yappani bar chair</p>
           </div>
           <div className="md:col-span-1 flex flex-col justify-center">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-medium mb-4 text-narkk-slate">
@@ -53,7 +54,7 @@ const Home = () => {
       </section>
 
       {/* Featured Products */}
-      <section className="section-padding bg-narkk-rosewood bg-opacity-30">
+      <section className="section-padding bg-[#BDACA9]">
         <div className="container-custom">
           <div className="mb-12">
             <h2 className="uppercase text-sm tracking-widest font-medium text-narkk-slate mb-2">FEATURED</h2>
