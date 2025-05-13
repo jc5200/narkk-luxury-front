@@ -14,6 +14,7 @@ import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
 import OrderConfirmation from "@/pages/OrderConfirmation";
 import NotFound from "@/pages/NotFound";
+import WooCommerceConfig from "@/pages/WooCommerceConfig";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order-confirmation" element={<OrderConfirmation />} />
+              <Route path="/woocommerce-config" element={<WooCommerceConfig />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

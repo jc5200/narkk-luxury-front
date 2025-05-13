@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '@/hooks/use-cart';
 import { toast } from 'sonner';
+import { wooCommerceApi } from '@/lib/woocommerce-api';
 
 interface FormData {
   firstName: string;
@@ -45,12 +46,54 @@ const Checkout = () => {
     setLoading(true);
 
     try {
-      // In a real app, this would make a POST request to the WooCommerce API
-      // Simulating API request with timeout
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Generate a random order ID
-      const orderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+      // Check if WooCommerce is configured
+      const apiUrl = localStorage.getItem('wc_api_url');
+      const consumerKey = localStorage.getItem('wc_consumer_key');
+      const consumerSecret = localStorage.getItem('wc_consumer_secret');
+      
+      let orderId;
+      
+      if (apiUrl && consumerKey && consumerSecret) {
+        // Create order via WooCommerce API
+        const orderData = {
+          payment_method: "bacs",
+          payment_method_title: "Direct Bank Transfer",
+          set_paid: true,
+          billing: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            address_1: formData.address,
+            city: formData.city,
+            state: formData.state,
+            postcode: formData.postalCode,
+            country: "IN",
+            email: formData.email,
+            phone: formData.phone
+          },
+          shipping: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            address_1: formData.address,
+            city: formData.city,
+            state: formData.state,
+            postcode: formData.postalCode,
+            country: "IN"
+          },
+          line_items: cart.items.map(item => ({
+            product_id: item.id,
+            quantity: item.quantity,
+          }))
+        };
+        
+        // Create order via WooCommerce API
+        const order = await wooCommerceApi.createOrder(orderData);
+        orderId = order.id;
+      } else {
+        // Using demo mode - generate a mock order ID
+        orderId = `ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+        // Simulate API request with timeout
+        await new Promise(resolve => setTimeout(resolve, 1500));
+      }
 
       // Store order data for the confirmation page
       localStorage.setItem('narkk-last-order', JSON.stringify({
