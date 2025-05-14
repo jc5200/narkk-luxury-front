@@ -3,6 +3,15 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag } from 'lucide-react';
 import { useCart } from '@/hooks/use-cart';
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -39,18 +48,55 @@ const Header = () => {
         </div>
         
         <nav className="hidden md:block">
-          <ul className="flex space-x-8">
-            <li>
-              <Link to="/" className="text-narkk-slate hover:text-narkk-clay transition-colors">
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link to="/shop" className="text-narkk-slate hover:text-narkk-clay transition-colors">
-                Shop
-              </Link>
-            </li>
-          </ul>
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link to="/" className="text-narkk-slate hover:text-narkk-clay transition-colors px-4 py-2">
+                  Home
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link to="/shop" className="text-narkk-slate hover:text-narkk-clay transition-colors px-4 py-2">
+                  Shop
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="text-narkk-slate hover:text-narkk-clay transition-colors">
+                  Information
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4">
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          to="/checkout"
+                          className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground"
+                        >
+                          <div className="text-sm font-medium leading-none">Checkout</div>
+                          <p className="text-sm leading-snug text-muted-foreground">
+                            Complete your purchase
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                    <li>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          to="/woocommerce-config"
+                          className="block select-none space-y-1 rounded-md p-3 hover:bg-accent hover:text-accent-foreground"
+                        >
+                          <div className="text-sm font-medium leading-none">WooCommerce Setup</div>
+                          <p className="text-sm leading-snug text-muted-foreground">
+                            Configure your WooCommerce integration
+                          </p>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </nav>
         
         <div className="flex items-center space-x-4">

@@ -7,6 +7,13 @@ import { getFeaturedProducts, Product } from '@/lib/mock-data';
 const Home = () => {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>({
+    hero: false,
+    featured: false,
+    products: false,
+    services: false,
+    trade: false,
+  });
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -21,20 +28,49 @@ const Home = () => {
     };
 
     fetchProducts();
+    
+    // Set hero section visible immediately
+    setVisibleSections(prev => ({ ...prev, hero: true }));
+    
+    // Set up intersection observer for sections
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1,
+    };
+    
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.id;
+          setVisibleSections(prev => ({ ...prev, [sectionId]: true }));
+        }
+      });
+    };
+    
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    
+    document.querySelectorAll('section[id]').forEach(section => {
+      observer.observe(section);
+    });
+    
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-narkk-grey h-[85vh] flex items-center">
+      <section id="hero" className={`relative bg-narkk-grey h-[85vh] flex items-center transition-opacity duration-1000 ${visibleSections.hero ? 'opacity-100' : 'opacity-0'}`}>
         <div className="container-custom grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="md:col-span-1">
             <img
-              src="/lovable-uploads/08e35f11-3797-4fdc-9c12-c779b64ca01f.png"
-              alt="Yappani bar chair"
+              src="/lovable-uploads/c5eb0335-30c9-40fc-a527-83a89fbcc8a0.png"
+              alt="Upholstered chair"
               className="h-64 w-full md:h-96 object-cover object-center"
             />
-            <p className="text-narkk-slate font-medium mt-2">Yappani bar chair</p>
+            <p className="text-narkk-slate font-medium mt-2">Modern lounge chair</p>
           </div>
           <div className="md:col-span-1 flex flex-col justify-center">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-playfair font-medium mb-4 text-narkk-slate">
@@ -54,7 +90,7 @@ const Home = () => {
       </section>
 
       {/* Featured Products */}
-      <section className="section-padding bg-[#BDACA9]">
+      <section id="featured" className={`section-padding bg-[#BDACA9] transition-all duration-1000 transform ${visibleSections.featured ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
         <div className="container-custom">
           <div className="mb-12">
             <h2 className="uppercase text-sm tracking-widest font-medium text-narkk-slate mb-2">FEATURED</h2>
@@ -73,8 +109,12 @@ const Home = () => {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredProducts.map((product) => (
-                <div key={product.id} className="group animate-fade-in">
+              {featuredProducts.map((product, index) => (
+                <div 
+                  key={product.id} 
+                  className="group animate-fade-in"
+                  style={{ animationDelay: `${index * 200}ms` }}
+                >
                   <Link to={`/product/${product.slug}`}>
                     <div className="overflow-hidden mb-4">
                       <img
@@ -98,7 +138,7 @@ const Home = () => {
       </section>
 
       {/* Our Products */}
-      <section className="section-padding">
+      <section id="products" className={`section-padding transition-all duration-1000 transform ${visibleSections.products ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
           <div className="bg-narkk-slate p-12 md:p-16 lg:p-24 flex flex-col justify-center">
             <h2 className="uppercase font-playfair text-3xl mb-4">
@@ -122,7 +162,7 @@ const Home = () => {
       </section>
 
       {/* Services */}
-      <section className="bg-narkk-slate py-12 md:py-16">
+      <section id="services" className={`bg-narkk-slate py-12 md:py-16 transition-all duration-1000 transform ${visibleSections.services ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
         <div className="container-custom">
           <h2 className="text-center text-2xl md:text-3xl lg:text-4xl font-playfair mb-12">
             <span className="text-narkk-clay">WE GO THE</span>{" "}
@@ -210,7 +250,7 @@ const Home = () => {
       </section>
 
       {/* Trade Program */}
-      <section className="section-padding bg-narkk-rosewood bg-opacity-30">
+      <section id="trade" className={`section-padding bg-narkk-rosewood bg-opacity-30 transition-all duration-1000 transform ${visibleSections.trade ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
         <div className="container-custom grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="flex flex-col justify-center">
             <h2 className="uppercase text-3xl font-playfair text-narkk-slate mb-6">TRADE PROGRAM</h2>

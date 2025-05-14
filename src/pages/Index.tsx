@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Home from './Home';
 
 const Index = () => {
@@ -35,12 +35,12 @@ const Index = () => {
               </p>
             </div>
             <div className="flex space-x-4">
-              <Link 
-                to="/woocommerce-config" 
+              <button 
+                onClick={() => navigate('/woocommerce-config')}
                 className="bg-narkk-clay text-white px-4 py-2 rounded hover:bg-opacity-90 transition-colors"
               >
                 Configure Now
-              </Link>
+              </button>
               <button 
                 onClick={() => setShowBanner(false)}
                 className="bg-transparent border border-white text-white px-4 py-2 rounded hover:bg-white hover:text-narkk-slate transition-colors"
